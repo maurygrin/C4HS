@@ -8,7 +8,7 @@ import Data.List
 import System.IO
 import Board
 
--- Main of the proyect that starts the game
+-- Main of the proyect that starts the game.
 main = do
      let bd = mkBoard 7 6
      let p = mkPlayer
@@ -45,7 +45,7 @@ readSlot bd p = do
           end = do 
                return (-1)
 
--- Starts a game with another player
+-- Starts a game with another player.
 playGame :: [[Int]] -> Int -> IO()
 playGame bd p = do
      col <- readSlot bd p 
@@ -65,14 +65,14 @@ playGame bd p = do
      else do 
           putStrLn "\nThanks for playing\n"
 
---Shows who won the game
+-- Shows who won the game.
 showWin :: Int -> IO()
 showWin p = do
      if p == 1
      then putStr "1"
      else putStr "2"
 
---Change current turn
+-- Change current turn.
 changeTurn :: Bool -> Bool
 changeTurn currentP
      | currentP = False
