@@ -71,3 +71,9 @@ showWin p = do
      if p == 1
      then putStr "1"
      else putStr "2"
+
+--Change current turn
+changeTurn :: Bool -> Bool
+changeTurn currentP
+     | currentP = False
+     | otherwise = True
