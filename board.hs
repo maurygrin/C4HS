@@ -29,7 +29,7 @@ dropInSlot :: [[Int]] -> Int -> Int -> [[Int]]
 dropInSlot bd i p = makeNewCol bd i newCol
     where curCol = getCol bd i;
           emptyPos = getNTP curCol;
-          newCol = insertToken emptyPos p currCol
+          newCol = insertToken emptyPos p curCol
 
 --get the column for the index provided
 getCol :: [[Int]] -> Int -> [Int]   
@@ -88,13 +88,13 @@ colHeight bd
 
 winSequence :: [[Int]] -> Int -> Int -> Bool
 winSequence bd p index
-    | indexOOB bd i j = False
-    | (not (getTokenPos bd i j == p)) = False
+    | indexOOB bd col row = False
+    | (not (getTokenPos bd col row == p)) = False
     | (isWon == True) = True
     | otherwise = winSequence bd p (index + 1)
     where col = convertItoCol bd index;
           row = convertItoRow bd index;
-          countRight = count bd col row 1 0 p 4;
+          countRight = count bd i row 1 0 p 4;
           countLeft = count bd col row (-1) 0 p 4;
           countUp = count bd col row 0 1 p 4;
           countDown = count bd col row 0 (-1) p 4;
@@ -105,7 +105,7 @@ winSequence bd p index
           isWon = (countLeft == 3) || (countRight == 3) ||
                   (countUp == 3) || (countDown == 3) || 
                   (countDiagonalUpLeft == 3) || 
-                  (countDiagonaldownLeft == 3) ||
+                  (countDiagonalDownLeft == 3) ||
                   (countDiagonalUpRight == 3) || 
                   (countDiagonalDownRight == 3);
 
@@ -158,16 +158,12 @@ boardToStrHelper bd playerToChar i
     where callAgain = boardToStrHelper bd playerToChar (i + 1);
           totalCol = numSlot bd;
           numOfTokens = getAS bd;
-          isLast = i == (totalAS - 1);
+          isLast = i == (numOfTokens - 1);
           nextLine = if (isLast) then "" else "\n";
           col = convertItoCol bd i;
           row = convertItoRow bd i;
           token = getTokenPos bd col row
           tokenString = playerToChar token
-
-
-
-
 
 
 --taking turns
