@@ -4,7 +4,7 @@
 -- CS3360 TR 10:30 - 11:50 
 -- 12/06/18
 
-module Board(mkBoard, mkPlayer, mkOpponent, changeTurn, dropInSlot,isSlotOpen,numSlot,isFull, isWonBy, colHeight,boardToStr, changeTurn) where
+module Board(mkBoard, mkPlayer, mkOpponent, changeTurn, dropInSlot,isSlotOpen,numSlot,isFull, isWonBy, colHeight,boardToStr, changePlayer) where
 
 import Data.List
 import Data.Array
@@ -94,7 +94,7 @@ winSequence bd p index
     | otherwise = winSequence bd p (index + 1)
     where col = convertItoCol bd index;
           row = convertItoRow bd index;
-          countRight = count bd i row 1 0 p 4;
+          countRight = count bd col row 1 0 p 4;
           countLeft = count bd col row (-1) 0 p 4;
           countUp = count bd col row 0 1 p 4;
           countDown = count bd col row 0 (-1) p 4;
@@ -167,8 +167,8 @@ boardToStrHelper bd playerToChar i
 
 
 --taking turns
-changeTurn :: Int -> Int
-changeTurn turn
+changePlayer :: Int -> Int
+changePlayer turn
      |turn == 1 = mkOpponent
      |otherwise = mkPlayer
 
