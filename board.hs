@@ -4,7 +4,7 @@
 -- CS3360 TR 10:30 - 11:50 
 -- 12/06/18
 
-module Board(mkBoard, mkPlayer, mkOpponent, changeTurn, dropInSlot,isSlotOpen,numSlot,isFull, isWonBy, colHeight,boardToStr, changePlayer) where
+module Board(mkBoard, mkPlayer, mkOpponent, dropInSlot,isSlotOpen,numSlot,isFull, isWonBy, colHeight,boardToStr, changePlayer) where
 
 import Data.List
 import Data.Array
