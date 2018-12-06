@@ -4,7 +4,7 @@
 -- CS3360 TR 10:30 - 11:50 
 -- 12/06/18
 
-module Board(mkBoard, mkPlayer, mkOpponent, changeTurn) where
+module Board(mkBoard, mkPlayer, mkOpponent, changeTurn, dropInSlot,isSlotOpen,numSlot,isFull, isWonBy, colHeight,boardToStr, changeTurn) where
 
 import Data.List
 import Data.Array
@@ -33,7 +33,7 @@ dropInSlot bd i p = makeNewCol bd i newCol
 
 --get the column for the index provided
 getCol :: [[Int]] -> Int -> [Int]   
-getColumn bd i = bd !! i
+getCol bd i = bd !! i
 
 --get Next Token Placement
 getNTP col = last (findIndices(==0) col)
@@ -142,10 +142,28 @@ count bd i j i2 j2 p max
           row = (j + j2)
           callAgain = count bd col row i2 j2 p (max - 1)
 
---4. (12 points) Converting a board to a string for printing
+--4. (12 points) Converting a board to a string for printing-----------------------------------
 
 
+--  Return a string representation of a board bd. 
+boardToStr :: [[Int]] -> (Int -> String) -> String
+boardToStr bd playerToChar = boardToStrHelper bd playerToChar 0
 
+-- boardToStr Helper
+boardToStrHelper :: [[Int]] -> (Int -> String) -> Int -> String
+boardToStrHelper bd playerToChar i
+    | (col == (totalCol - 1)) = tokenString ++ nextLine ++ callAgain
+    | (i == numOfTokens) = ""
+    | otherwise = tokenString ++ callAgain
+    where callAgain = boardToStrHelper bd playerToChar (i + 1);
+          totalCol = numSlot bd;
+          numOfTokens = getAS bd;
+          isLast = i == (totalAS - 1);
+          nextLine = if (isLast) then "" else "\n";
+          col = convertItoCol bd i;
+          row = convertItoRow bd i;
+          token = getTokenPos bd col row
+          tokenString = playerToChar token
 
 
 
