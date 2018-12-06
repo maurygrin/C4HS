@@ -62,6 +62,91 @@ numSlot bd = length bd
 isFull :: [[Int]] -> Bool
 isFull bd = not (elem 0 (concat bd))
 
+--3. (25 points) Determining the outcome-----------------------------------------
+
+-- checks to see if player won
+isWonBy:: [[Int]] -> Int -> Bool
+isWonBy bd p = isWonByHelper bd p 0
+
+--  isWonBy Helper
+isWonByHelper :: [[Int]] -> Int -> Int -> Bool
+isWonByHelper bd p pos
+    | pos == (getAS bd) = False
+    | winSequence bd p pos = True
+    | otherwise = isWonByHelper bd p (pos+1)
+     
+
+--  Gets the total amount of avaible spaces
+getAS :: [[Int]] -> Int
+getAS bd = (numSlot bd) * (colHeight bd)
+
+-- returns the height of the boards column
+colHeight :: [[Int]] -> Int
+colHeight bd
+    | (length bd == 0) = 0
+    | otherwise = length (bd !! 0) 
+
+winSequence :: [[Int]] -> Int -> Int -> Bool
+winSequence bd p index
+    | indexOOB bd i j = False
+    | (not (getTokenPos bd i j == p)) = False
+    | (isWon == True) = True
+    | otherwise = winSequence bd p (index + 1)
+    where col = convertItoCol bd index;
+          row = convertItoRow bd index;
+          countRight = count bd col row 1 0 p 4;
+          countLeft = count bd col row (-1) 0 p 4;
+          countUp = count bd col row 0 1 p 4;
+          countDown = count bd col row 0 (-1) p 4;
+          countDiagonalUpLeft = count bd col row (-1) 1 p 4;
+          countDiagonalDownLeft = count bd col row (-1) (-1) p 4;
+          countDiagonalUpRight = count bd col row 1 1 p 4;
+          countDiagonalDownRight = count bd col row 1 (-1) p 4;
+          isWon = (countLeft == 3) || (countRight == 3) ||
+                  (countUp == 3) || (countDown == 3) || 
+                  (countDiagonalUpLeft == 3) || 
+                  (countDiagonaldownLeft == 3) ||
+                  (countDiagonalUpRight == 3) || 
+                  (countDiagonalDownRight == 3);
+
+-- index out of bounds check
+indexOOB :: [[Int]] -> Int -> Int -> Bool
+indexOOB bd i j 
+    | i < 0 = True
+    | j < 0 = True
+    | i >= numSlot bd = True
+    | j >= colHeight bd = True
+    | otherwise = False
+
+getTokenPos :: [[Int]] -> Int -> Int -> Int
+getTokenPos bd i j 
+    | indexOOB bd i j = -1
+    | otherwise = (bd !! i) !! j
+    
+
+-- Converts an index to a column number of board bd
+convertItoCol :: [[Int]] -> Int -> Int
+convertItoCol bd i = mod i (numSlot bd)
+
+-- Converts an index to a row number of board bd
+convertItoRow :: [[Int]] -> Int -> Int
+convertItoRow bd i = quot i ((colHeight bd) + 1)
+
+  
+--count the tokens of the current player
+count bd i j i2 j2 p max
+    | (max == 1) = 0
+    | (getTokenPos bd col row == p) = 1 + callAgain
+    | otherwise = callAgain
+    where col = (i + i2);
+          row = (j + j2)
+          callAgain = count bd col row i2 j2 p (max - 1)
+
+--4. (12 points) Converting a board to a string for printing
+
+
+
+
 
 
 
@@ -73,16 +158,6 @@ changeTurn turn
      |turn == 1 = mkOpponent
      |otherwise = mkPlayer
 
-slotHeight :: [[Int]] -> Int
-slotHeight bd
-    -- Height is zero if the board is empty
-    | (length bd == 0) = 0
-    -- Count the number of elements in the first column
-    | otherwise = length (bd !! 0) 
-    
---  Gets the total amount of spaces available in the board bd
-getTotal :: [[Int]] -> Int
-getTotal bd = (numSlot bd) * (slotHeight bd)
 
 
 
